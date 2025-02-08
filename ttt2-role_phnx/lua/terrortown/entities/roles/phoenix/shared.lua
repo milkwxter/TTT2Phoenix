@@ -31,11 +31,3 @@ end
 function ROLE:Initialize()
   roles.SetBaseRole(self, ROLE_INNOCENT)
 end
-
-if SERVER then
-	function ENT:PhysicsCollide( data, phys )
-		if CORPSE.IsRealPlayerCorpse( phys ) then
-			print("corpse collided with something: " .. data.HitEntity)
-		end
-	end
-end
