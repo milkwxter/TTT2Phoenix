@@ -35,7 +35,7 @@ end
 if SERVER then
 	function ENT:PhysicsCollide( data, phys )
 		if CORPSE.IsRealPlayerCorpse( phys ) then
-			print("corpse collided with something")
+			print("corpse collided with something: " .. data.HitEntity)
 		end
 	end
 end
