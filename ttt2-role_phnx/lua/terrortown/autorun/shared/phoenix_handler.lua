@@ -23,9 +23,22 @@ if SERVER then
 
 			-- early return statements
 			if ply:IsReviving() then return end
+			
+			-- check for nearby fires (vanilla implementation)
+			local foundFlame = false
+			local nearbyEnts = ents.FindInSphere(rag:GetPos(), 50)
+			for _, ent in pairs(nearbyEnts) do
+				if ent:GetClass() == "ttt_flame" then
+					foundFlame = true
+					break
+				end
+			end
 
-			-- if body is on fire, we revive
-            if rag:IsOnFire() then
+			-- if body is on fire OR we found a nearby flame, we revive
+            if rag:IsOnFire() or foundFlame == true then
+				if not rag:IsOnFire() then
+					rag:Ignite(5)
+				end
                 ply:Revive(5, function(p)
 					p:SetHealth(50)
 					p:GiveEquipmentItem("item_ttt_nofiredmg")
@@ -35,7 +48,11 @@ if SERVER then
         end
     end)
 	
-	hook.Add("TTTEndRound", "TTT2CleanupPhoenix", function()
+	hook.Add("TTTBeginRound", "TTT2CleanupPhoenixBR", function()
+		phoenixBodies = {}
+	end)
+	
+	hook.Add("TTTEndRound", "TTT2CleanupPhoenixER", function()
 		phoenixBodies = {}
 	end)
 end
